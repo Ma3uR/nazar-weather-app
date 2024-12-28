@@ -66,17 +66,10 @@ body {
     font-family: Arial, sans-serif;
     background: linear-gradient(-45deg, #00b4db, #0083b0, #006c9c, #004c6d);
     background-size: 400% 400%;
-    animation: gradientBG 15s ease infinite;
     min-height: 100vh;
     padding: 20px;
     color: #333;
     overflow-x: hidden;
-}
-
-@keyframes gradientBG {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
 }
 
 .container {
@@ -109,6 +102,7 @@ header h1 {
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     transition: all 0.3s ease;
+    animation: slideIn 0.5s ease-out;
 }
 
 .weather-card:hover {
@@ -119,14 +113,14 @@ header h1 {
 .temperature {
     text-align: center;
     margin-bottom: 40px;
-    animation: scaleIn 0.6s ease-out;
+    animation: fadeInUp 0.6s ease-out;
 }
 
 .degrees {
     font-size: 4em;
     font-weight: bold;
     display: inline-block;
-    animation: pulse 2s ease-in-out infinite;
+    animation: scaleIn 0.7s ease-out;
 }
 
 .temperature p {
@@ -147,9 +141,14 @@ header h1 {
 
 .info-item {
     text-align: center;
-    animation: fadeIn 0.5s ease-out;
+    animation: fadeInRight 0.5s ease-out forwards;
     animation-fill-mode: both;
+    opacity: 0;
 }
+
+.info-item:nth-child(1) { animation-delay: 0.2s; }
+.info-item:nth-child(2) { animation-delay: 0.4s; }
+.info-item:nth-child(3) { animation-delay: 0.6s; }
 
 .weather-icon {
     font-size: 2em;
@@ -193,7 +192,15 @@ header h1 {
     text-align: center;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
+    opacity: 0;
+    animation: fadeInUp 0.5s ease-out forwards;
 }
+
+.day:nth-child(1) { animation-delay: 0.2s; }
+.day:nth-child(2) { animation-delay: 0.3s; }
+.day:nth-child(3) { animation-delay: 0.4s; }
+.day:nth-child(4) { animation-delay: 0.5s; }
+.day:nth-child(5) { animation-delay: 0.6s; }
 
 .day:hover {
     transform: translateY(-5px);
@@ -399,12 +406,12 @@ body.dark-theme .stars input:checked ~ label {
 
 /* Анімація для температури */
 .temperature {
-    animation: scaleIn 0.6s ease-out;
+    animation: fadeInUp 0.6s ease-out;
 }
 
 .degrees {
     display: inline-block;
-    animation: pulse 2s ease-in-out infinite;
+    animation: scaleIn 0.7s ease-out;
 }
 
 @keyframes pulse {
@@ -538,10 +545,13 @@ h1, h2 {
     backdrop-filter: blur(10px);
     transition: right 0.3s ease;
     z-index: 999;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-out;
 }
 
 .settings-menu.active {
     right: 20px;
+    transform: translateX(0);
 }
 
 .settings-header {
@@ -750,8 +760,161 @@ body.dark-theme .telegram-link a:hover {
     background: rgba(64, 167, 227, 0.1);
 }
 
-/* Стилі для анімованого фону */
-.animated-background {
+/* Анімації для елементів інтерфейсу */
+.weather-card {
+    animation: slideIn 0.5s ease-out;
+}
+
+.temperature {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.degrees {
+    animation: scaleIn 0.7s ease-out;
+}
+
+.info-item {
+    opacity: 0;
+    animation: fadeInRight 0.5s ease-out forwards;
+}
+
+.info-item:nth-child(1) { animation-delay: 0.2s; }
+.info-item:nth-child(2) { animation-delay: 0.4s; }
+.info-item:nth-child(3) { animation-delay: 0.6s; }
+
+.forecast h3 {
+    animation: fadeInDown 0.5s ease-out;
+}
+
+.day {
+    opacity: 0;
+    animation: fadeInUp 0.5s ease-out forwards;
+}
+
+.day:nth-child(1) { animation-delay: 0.2s; }
+.day:nth-child(2) { animation-delay: 0.3s; }
+.day:nth-child(3) { animation-delay: 0.4s; }
+.day:nth-child(4) { animation-delay: 0.5s; }
+.day:nth-child(5) { animation-delay: 0.6s; }
+
+/* Keyframes для анімацій */
+@keyframes slideIn {
+    from {
+        transform: translateX(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        transform: translateX(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Анімація для кнопок при наведенні */
+.submit-rating, .settings-btn {
+    transition: all 0.3s ease;
+}
+
+.submit-rating:hover, .settings-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Анімація для меню налаштувань */
+.settings-menu {
+    transform: translateX(100%);
+    transition: transform 0.3s ease-out;
+}
+
+.settings-menu.active {
+    transform: translateX(0);
+}
+
+/* Плавні переходи для темної теми */
+body, .weather-card, .day, .settings-menu {
+    transition: background-color 0.3s ease, 
+                color 0.3s ease, 
+                box-shadow 0.3s ease;
+}
+
+/* Додаємо стилі для конфеті */
+.confetti-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    display: none;
+}
+
+.confetti {
+    position: absolute;
+    animation: confettiFall 3s ease-in-out forwards;
+    opacity: 0;
+}
+
+@keyframes confettiFall {
+    0% {
+        transform: translateY(-100%) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+.confetti-container.active {
+    display: block;
+}
+
+/* Стилі для великих анімованих іконок погоди */
+.weather-background {
     position: fixed;
     top: 0;
     left: 0;
@@ -762,179 +925,72 @@ body.dark-theme .telegram-link a:hover {
     overflow: hidden;
 }
 
-.weather-element {
+.weather-icon-large {
     position: absolute;
-    font-size: 40px;
-    opacity: 0.3;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
+    font-size: 200px;
+    opacity: 0.1;
+    filter: blur(2px);
+    animation: floatWeather 20s ease-in-out infinite;
 }
 
-/* Хмари */
-.cloud-1 { top: 10%; right: 20%; animation: floatCloud 20s ease-in-out infinite; }
-.cloud-2 { top: 30%; right: 40%; animation: floatCloud 25s ease-in-out infinite; animation-delay: 5s; }
-.cloud-3 { top: 50%; right: 60%; animation: floatCloud 22s ease-in-out infinite; animation-delay: 8s; }
-.cloud-4 { top: 70%; right: 80%; animation: floatCloud 28s ease-in-out infinite; animation-delay: 12s; }
-
-/* Сонце і місяць */
-.sun {
-    top: 5%;
+.sun-large {
+    top: 10%;
     right: 10%;
-    font-size: 60px;
-    animation: rotateSun 30s ease-in-out infinite;
+    font-size: 250px;
+    color: #FFD700;
+    text-shadow: 0 0 50px rgba(255, 215, 0, 0.5);
+    animation: rotateSunLarge 30s linear infinite;
 }
 
-.moon {
-    top: 15%;
+.cloud-large {
+    top: 20%;
+    left: 15%;
+    color: #FFFFFF;
+    animation: floatCloudLarge 25s ease-in-out infinite;
+}
+
+.rain-large {
+    bottom: 40%;
     right: 20%;
-    font-size: 50px;
-    animation: floatMoon 25s ease-in-out infinite;
+    color: #87CEEB;
+    animation: floatRainLarge 22s ease-in-out infinite;
 }
 
-/* Опади */
-.rain-1 { right: 20%; animation: rain 8s ease-in infinite; }
-.rain-2 { right: 40%; animation: rain 7s ease-in infinite; animation-delay: 2s; }
-.rain-3 { right: 60%; animation: rain 9s ease-in infinite; animation-delay: 4s; }
-.rain-4 { right: 80%; animation: rain 6s ease-in infinite; animation-delay: 3s; }
-
-/* Сніг */
-.snow-1 { right: 25%; animation: snow 12s ease-in-out infinite; }
-.snow-2 { right: 45%; animation: snow 15s ease-in-out infinite; animation-delay: 3s; }
-.snow-3 { right: 65%; animation: snow 14s ease-in-out infinite; animation-delay: 5s; }
-.snow-4 { right: 85%; animation: snow 13s ease-in-out infinite; animation-delay: 7s; }
-
-/* Блискавки */
-.lightning-1 { top: 20%; right: 30%; animation: lightning 8s ease-out infinite; animation-delay: 2s; }
-.lightning-2 { top: 40%; right: 50%; animation: lightning 8s ease-out infinite; animation-delay: 6s; }
-
-/* Веселка */
-.rainbow {
-    bottom: -50%;
-    right: 20%;
-    font-size: 100px;
-    animation: showRainbow 30s ease-in-out infinite;
+@keyframes floatWeather {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(20px, -20px) rotate(5deg); }
+    50% { transform: translate(0, -40px) rotate(0deg); }
+    75% { transform: translate(-20px, -20px) rotate(-5deg); }
 }
 
-/* Додаткові елементи */
-.wind {
-    right: -100px;
-    top: 45%;
-    animation: blowWind 15s ease-in-out infinite;
+@keyframes rotateSunLarge {
+    from { transform: rotate(0deg) scale(1); }
+    to { transform: rotate(360deg) scale(1.1); }
 }
 
-.stars {
-    top: 15%;
-    right: 25%;
-    animation: twinkle 3s ease-in-out infinite;
+@keyframes floatCloudLarge {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(100px, 20px) scale(1.1); }
 }
 
-/* Анімації */
-@keyframes floatCloud {
-    0% { transform: translateX(100%) scale(1) translateY(0); }
-    25% { transform: translateX(75vw) scale(1.1) translateY(20px); }
-    50% { transform: translateX(50vw) scale(1.2) translateY(0); }
-    75% { transform: translateX(25vw) scale(1.1) translateY(-20px); }
-    100% { transform: translateX(-100%) scale(1) translateY(0); }
-}
-
-@keyframes rotateSun {
-    0% { transform: rotate(0deg) scale(1) translate(0, 0); }
-    25% { transform: rotate(90deg) scale(1.1) translate(20px, 20px); }
-    50% { transform: rotate(180deg) scale(1.2) translate(0, 40px); }
-    75% { transform: rotate(270deg) scale(1.1) translate(-20px, 20px); }
-    100% { transform: rotate(360deg) scale(1) translate(0, 0); }
-}
-
-@keyframes floatMoon {
-    0% { transform: translate(0, 0) rotate(0deg) scale(1); }
-    25% { transform: translate(-50px, 25px) rotate(90deg) scale(1.1); }
-    50% { transform: translate(-100px, 50px) rotate(180deg) scale(1.2); }
-    75% { transform: translate(-50px, 25px) rotate(270deg) scale(1.1); }
-    100% { transform: translate(0, 0) rotate(360deg) scale(1); }
-}
-
-@keyframes rain {
-    0% { transform: translate(0, -100%) rotate(15deg) scale(1); }
-    25% { transform: translate(-25px, 25vh) rotate(5deg) scale(0.9); }
-    50% { transform: translate(-50px, 50vh) rotate(0deg) scale(0.8); }
-    75% { transform: translate(-25px, 75vh) rotate(-5deg) scale(0.9); }
-    100% { transform: translate(0, 100vh) rotate(-15deg) scale(1); }
-}
-
-@keyframes snow {
-    0% { transform: translate(-50px, -100%) rotate(0deg) scale(1); }
-    25% { transform: translate(0, 25vh) rotate(90deg) scale(0.9); }
-    50% { transform: translate(50px, 50vh) rotate(180deg) scale(0.8); }
-    75% { transform: translate(0, 75vh) rotate(270deg) scale(0.9); }
-    100% { transform: translate(-50px, 100vh) rotate(360deg) scale(1); }
-}
-
-@keyframes lightning {
-    0%, 95%, 100% { opacity: 0; transform: scale(1) translateY(0); }
-    96% { opacity: 0.8; transform: scale(1.2) translateY(-10px); }
-    97% { opacity: 0.6; transform: scale(1.1) translateY(-5px); }
-    98% { opacity: 0.9; transform: scale(1.3) translateY(-15px); }
-    99% { opacity: 0.8; transform: scale(1.2) translateY(-8px); }
-}
-
-@keyframes showRainbow {
-    0% { transform: scale(0) translateY(0) rotate(0deg); opacity: 0; }
-    10% { transform: scale(0.5) translateY(-50px) rotate(-2deg); opacity: 0.2; }
-    25% { transform: scale(1) translateY(-100px) rotate(-5deg); opacity: 0.4; }
-    50% { transform: scale(1.1) translateY(-120px) rotate(0deg); opacity: 0.5; }
-    75% { transform: scale(1) translateY(-100px) rotate(5deg); opacity: 0.4; }
-    90% { transform: scale(0.5) translateY(-50px) rotate(2deg); opacity: 0.2; }
-    100% { transform: scale(0) translateY(0) rotate(0deg); opacity: 0; }
-}
-
-@keyframes blowWind {
-    0% { transform: translateX(100vw) scale(1) translateY(0); opacity: 0; }
-    10% { transform: translateX(90vw) scale(1.1) translateY(-20px); opacity: 0.2; }
-    25% { transform: translateX(75vw) scale(1.2) translateY(-40px); opacity: 0.3; }
-    50% { transform: translateX(50vw) scale(1.3) translateY(0); opacity: 0.4; }
-    75% { transform: translateX(25vw) scale(1.2) translateY(40px); opacity: 0.3; }
-    90% { transform: translateX(10vw) scale(1.1) translateY(20px); opacity: 0.2; }
-    100% { transform: translateX(-100vw) scale(1) translateY(0); opacity: 0; }
-}
-
-@keyframes twinkle {
-    0% { opacity: 0.1; transform: scale(1) translate(0, 0); }
-    25% { opacity: 0.3; transform: scale(1.1) translate(5px, 5px); }
-    50% { opacity: 0.4; transform: scale(1.2) translate(0, 10px); }
-    75% { opacity: 0.3; transform: scale(1.1) translate(-5px, 5px); }
-    100% { opacity: 0.1; transform: scale(1) translate(0, 0); }
+@keyframes floatRainLarge {
+    0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+    50% { transform: translate(-50px, 30px) scale(1.05) rotate(5deg); }
 }
 
 /* Адаптація для темної теми */
-body.dark-theme .weather-element {
-    opacity: 0.2;
-    filter: brightness(0.8);
+body.dark-theme .weather-icon-large {
+    opacity: 0.05;
 }
 
-/* Анімація появи елементів */
-.weather-element {
-    animation-name: fadeIn;
-    animation-duration: 2s;
-    animation-fill-mode: both;
+body.dark-theme .sun-large {
+    color: #FFA500;
 }
 
-/* Затримки появи елементів */
-.cloud-1 { animation-delay: 0.2s; }
-.cloud-2 { animation-delay: 0.4s; }
-.cloud-3 { animation-delay: 0.6s; }
-.cloud-4 { animation-delay: 0.8s; }
-.sun { animation-delay: 1s; }
-.moon { animation-delay: 1.2s; }
-.rain-1 { animation-delay: 1.4s; }
-.rain-2 { animation-delay: 1.6s; }
-.rain-3 { animation-delay: 1.8s; }
-.rain-4 { animation-delay: 2s; }
-.snow-1 { animation-delay: 2.2s; }
-.snow-2 { animation-delay: 2.4s; }
-.snow-3 { animation-delay: 2.6s; }
-.snow-4 { animation-delay: 2.8s; }
-.lightning-1 { animation-delay: 3s; }
-.lightning-2 { animation-delay: 3.2s; }
-.rainbow { animation-delay: 3.4s; }
-.wind { animation-delay: 3.6s; }
-.stars { animation-delay: 3.8s; }
+body.dark-theme .cloud-large {
+    color: #808080;
+}
+
+body.dark-theme .rain-large {
+    color: #4682B4;
+}

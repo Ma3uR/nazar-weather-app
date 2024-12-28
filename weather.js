@@ -125,4 +125,52 @@ window.addEventListener('load', () => {
         getCurrentWeather();
         getWeeklyForecast();
     }, 1800000);
+});
+
+// Додаємо функцію для створення конфеті
+function createConfetti() {
+    const container = document.createElement('div');
+    container.className = 'confetti-container active';
+    document.body.appendChild(container);
+
+    const emojis = ['🎉', '🎊', '✨', '⭐', '🌟'];
+    const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4'];
+
+    // Створюємо 50 елементів конфеті
+    for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.animationDelay = Math.random() * 2 + 's';
+        confetti.style.fontSize = Math.random() * 20 + 20 + 'px';
+        
+        // Випадково обираємо емодзі або кольоровий квадрат
+        if (Math.random() > 0.5) {
+            confetti.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        } else {
+            confetti.style.width = '10px';
+            confetti.style.height = '10px';
+            confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.transform = 'rotate(' + (Math.random() * 360) + 'deg)';
+        }
+
+        container.appendChild(confetti);
+    }
+
+    // Видаляємо контейнер після завершення анімації
+    setTimeout(() => {
+        container.remove();
+    }, 5000);
+}
+
+// Додаємо обробник для зірок
+document.addEventListener('DOMContentLoaded', () => {
+    const stars = document.querySelectorAll('.stars input');
+    stars.forEach(star => {
+        star.addEventListener('change', (e) => {
+            if (e.target.value === '5') {
+                createConfetti();
+            }
+        });
+    });
 }); 
