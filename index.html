@@ -225,9 +225,9 @@
                             <option value="fahrenheit">°F</option>
                         </select>
                     </div>
-                    <div class="setting-item telegram-link">
-                        <a href="https://t.me/+r1i9rzOtc49kYWEy" target="_blank" rel="noopener noreferrer">
-                            <i class="telegram-icon">📱</i> Відгуки сайту
+                    <div class="telegram-link">
+                        <a href="https://t.me/Vidgyku_na_temy_saita" target="_blank">
+                            <i>��</i> Відгуки сайту
                         </a>
                     </div>
                 </div>
@@ -313,5 +313,43 @@
     
     <script src="weather.js"></script>
     <script src="main.js"></script>
+
+    <!-- Додаємо стартовий екран -->
+    <div class="location-setup" id="locationSetup">
+        <div class="setup-step" id="geoStep">
+            <h2>Вітаємо у Weather App!</h2>
+            <p>Для точного прогнозу погоди нам потрібно знати ваше місцезнаходження</p>
+            <button id="geoButton" class="setup-btn geo-btn">
+                <i>📍</i> Визначити автоматично
+            </button>
+            <button id="manualButton" class="setup-btn secondary">
+                <i>🌍</i> Обрати країну вручну
+            </button>
+        </div>
+
+        <div class="setup-step" id="countryStep" style="display: none;">
+            <h2>Оберіть країну</h2>
+            <div class="country-search">
+                <input type="text" id="countrySearch" placeholder="Пошук країни...">
+            </div>
+            <div class="countries-list">
+                <!-- Список буде заповнено динамічно -->
+            </div>
+        </div>
+
+        <div class="setup-step" id="cityStep" style="display: none;">
+            <h2>Оберіть місто</h2>
+            <div class="city-search">
+                <input type="text" id="citySearch" placeholder="Пошук міста...">
+            </div>
+            <div class="cities-list">
+                <!-- Список буде заповнено динамічно -->
+            </div>
+        </div>
+
+        <button id="continueButton" class="setup-btn continue" style="display: none;">
+            Далі <i>➜</i>
+        </button>
+    </div>
 </body>
 </html> 

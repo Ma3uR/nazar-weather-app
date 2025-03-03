@@ -1,7 +1,212 @@
-// Конфігурація API
-const WEATHER_API_KEY = '53688d3bf952f07624952c34d4576678'; // Потрібно буде замінити на реальний ключ
-const CITY = 'Cherkasy';
-const COUNTRY = 'UA';
+// Змінюємо константи на змінні
+let CITY = 'Cherkasy';
+let COUNTRY = 'UA';
+const WEATHER_API_KEY = '53688d3bf952f07624952c34d4576678';
+
+document.addEventListener('DOMContentLoaded', function() {
+    const mainContent = document.querySelector('.container');
+    const locationSetup = document.getElementById('locationSetup');
+    const geoStep = document.getElementById('geoStep');
+    const countryStep = document.getElementById('countryStep');
+    const cityStep = document.getElementById('cityStep');
+    const continueButton = document.getElementById('continueButton');
+    
+    // Приховуємо основний контент при завантаженні
+    mainContent.style.display = 'none';
+
+    // Список популярних країн з містами
+    const popularCountries = [
+        { 
+            code: 'UA', 
+            name: 'Україна', 
+            flag: '🇺🇦',
+            cities: ['Київ', 'Харків', 'Одеса', 'Дніпро', 'Львів', 'Черкаси', 'Полтава']
+        },
+        { 
+            code: 'PL', 
+            name: 'Польща', 
+            flag: '🇵🇱',
+            cities: ['Варшава', 'Краків', 'Лодзь', 'Вроцлав', 'Познань']
+        },
+        // Додайте інші країни за потребою
+    ];
+
+    let selectedCountry = null;
+
+    // Обробник для кнопки ручного вибору
+    document.getElementById('manualButton').addEventListener('click', () => {
+        geoStep.style.display = 'none';
+        countryStep.style.display = 'block';
+        showCountryList();
+    });
+
+    // Функція показу списку країн
+    function showCountryList() {
+        const countriesList = document.querySelector('.countries-list');
+        countriesList.innerHTML = '';
+        
+        popularCountries.forEach(country => {
+            const countryElement = document.createElement('div');
+            countryElement.className = 'country-item';
+            countryElement.innerHTML = `${country.flag} ${country.name}`;
+            
+            countryElement.addEventListener('click', () => {
+                selectedCountry = country;
+                showCityStep(country);
+                
+                // Видаляємо попередній вибір
+                document.querySelectorAll('.country-item').forEach(item => {
+                    item.classList.remove('selected');
+                });
+                countryElement.classList.add('selected');
+            });
+            
+            countriesList.appendChild(countryElement);
+        });
+    }
+
+    // Функція показу списку міст
+    function showCityStep(country) {
+        countryStep.style.display = 'none';
+        cityStep.style.display = 'block';
+        
+        const citiesList = document.querySelector('.cities-list');
+        citiesList.innerHTML = '';
+        
+        country.cities.forEach(cityName => {
+            const cityElement = document.createElement('div');
+            cityElement.className = 'city-item';
+            cityElement.textContent = cityName;
+            
+            cityElement.addEventListener('click', () => {
+                CITY = cityName;
+                COUNTRY = country.code;
+                
+                // Видаляємо попередній вибір
+                document.querySelectorAll('.city-item').forEach(item => {
+                    item.classList.remove('selected');
+                });
+                cityElement.classList.add('selected');
+                continueButton.style.display = 'block';
+            });
+            
+            citiesList.appendChild(cityElement);
+        });
+    }
+
+    // Пошук по країнах
+    document.getElementById('countrySearch').addEventListener('input', function(e) {
+        const searchText = e.target.value.toLowerCase();
+        const filteredCountries = popularCountries.filter(country => 
+            country.name.toLowerCase().includes(searchText)
+        );
+        
+        const countriesList = document.querySelector('.countries-list');
+        countriesList.innerHTML = '';
+        
+        filteredCountries.forEach(country => {
+            const countryElement = document.createElement('div');
+            countryElement.className = 'country-item';
+            countryElement.innerHTML = `${country.flag} ${country.name}`;
+            
+            countryElement.addEventListener('click', () => {
+                selectedCountry = country;
+                showCityStep(country);
+            });
+            
+            countriesList.appendChild(countryElement);
+        });
+    });
+
+    // Пошук по містах
+    document.getElementById('citySearch').addEventListener('input', function(e) {
+        if (!selectedCountry) return;
+        
+        const searchText = e.target.value.toLowerCase();
+        const filteredCities = selectedCountry.cities.filter(city => 
+            city.toLowerCase().includes(searchText)
+        );
+        
+        const citiesList = document.querySelector('.cities-list');
+        citiesList.innerHTML = '';
+        
+        filteredCities.forEach(cityName => {
+            const cityElement = document.createElement('div');
+            cityElement.className = 'city-item';
+            cityElement.textContent = cityName;
+            
+            cityElement.addEventListener('click', () => {
+                CITY = cityName;
+                COUNTRY = selectedCountry.code;
+                continueButton.style.display = 'block';
+            });
+            
+            citiesList.appendChild(cityElement);
+        });
+    });
+
+    // Обробник для кнопки "Далі"
+    continueButton.addEventListener('click', () => {
+        locationSetup.style.display = 'none';
+        mainContent.style.display = 'block';
+        getCurrentWeather();
+        getWeeklyForecast();
+    });
+
+    // Оновлюємо обробник для кнопки геолокації
+    document.getElementById('geoButton').addEventListener('click', function() {
+        const button = this;
+        
+        if (navigator.geolocation) {
+            // Додаємо клас завантаження
+            button.classList.add('loading');
+            button.innerHTML = '<i>🔄</i> Визначаємо місцезнаходження...';
+            
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    // Отримуємо місто за координатами
+                    fetch(`https://api.openweathermap.org/geo/1.0/reverse?lat=${position.coords.latitude}&lon=${position.coords.longitude}&limit=1&appid=${WEATHER_API_KEY}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data[0]) {
+                                CITY = data[0].name;
+                                COUNTRY = data[0].country;
+                                showMainContent();
+                            }
+                        })
+                        .catch(() => {
+                            button.classList.remove('loading');
+                            button.innerHTML = '<i>📍</i> Спробувати ще раз';
+                            alert('Не вдалося визначити місто. Будь ласка, оберіть місто вручну.');
+                            showCountryStep();
+                        });
+                },
+                (error) => {
+                    button.classList.remove('loading');
+                    button.innerHTML = '<i>📍</i> Спробувати ще раз';
+                    alert('Не вдалося визначити місцезнаходження. Оберіть країну вручну.');
+                    showCountryStep();
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 5000,
+                    maximumAge: 0
+                }
+            );
+        } else {
+            alert('Ваш браузер не підтримує геолокацію. Оберіть країну вручну.');
+            showCountryStep();
+        }
+    });
+});
+
+// Функція для конвертації температури
+function convertTemperature(celsius, unit) {
+    if (unit === 'fahrenheit') {
+        return Math.round((celsius * 9/5) + 32);
+    }
+    return Math.round(celsius);
+}
 
 // Функція для отримання поточної погоди
 async function getCurrentWeather() {
@@ -9,7 +214,7 @@ async function getCurrentWeather() {
         const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${CITY},${COUNTRY}&units=metric&appid=${WEATHER_API_KEY}&lang=ua`);
         const data = await response.json();
         
-        // Оновлення поточної температури та інших показників
+        const unit = document.getElementById('unitsSelect').value;
         const tempElement = document.querySelector('.degrees');
         const feelsLikeElement = document.querySelector('.temperature p');
         const windElement = document.querySelector('.info-item:nth-child(1) span');
@@ -17,8 +222,12 @@ async function getCurrentWeather() {
         const pressureElement = document.querySelector('.info-item:nth-child(3) span');
 
         if (data.main) {
-            tempElement.textContent = `${Math.round(data.main.temp)}°C`;
-            feelsLikeElement.textContent = `Відчувається як ${Math.round(data.main.feels_like)}°C`;
+            const temp = convertTemperature(data.main.temp, unit);
+            const feelsLike = convertTemperature(data.main.feels_like, unit);
+            const unitSymbol = unit === 'fahrenheit' ? '°F' : '°C';
+
+            tempElement.textContent = `${temp}${unitSymbol}`;
+            feelsLikeElement.textContent = `Відчувається як ${feelsLike}${unitSymbol}`;
             windElement.textContent = `${Math.round(data.wind.speed)} м/с`;
             humidityElement.textContent = `${data.main.humidity}%`;
             const pressureInMmHg = Math.round(data.main.pressure * 0.750062);
@@ -34,6 +243,7 @@ async function getWeeklyForecast() {
     try {
         const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${CITY},${COUNTRY}&units=metric&appid=${WEATHER_API_KEY}&lang=ua`);
         const data = await response.json();
+        const unit = document.getElementById('unitsSelect').value;
         
         if (data.list) {
             const dailyForecasts = {};
@@ -75,13 +285,16 @@ async function getWeeklyForecast() {
                 const forecast = dailyForecasts[dayName];
                 if (forecast) {
                     const avgTemp = forecast.temp / forecast.count;
-                    const popPercentage = Math.round(forecast.pop * 100); // Конвертуємо в відсотки
+                    const temp = convertTemperature(avgTemp, unit);
+                    const unitSymbol = unit === 'fahrenheit' ? '°F' : '°C';
+                    const popPercentage = Math.round(forecast.pop * 100);
+                    
                     const dayElement = document.createElement('div');
                     dayElement.className = 'day';
                     dayElement.innerHTML = `
                         <p>${dayName}</p>
                         <i>${getWeatherEmoji(forecast.weather)}</i>
-                        <span>${Math.round(avgTemp)}°C</span>
+                        <span>${temp}${unitSymbol}</span>
                         <div class="pop-info">
                             <span class="pop-icon">☔</span>
                             <span>${popPercentage}%</span>
@@ -120,6 +333,12 @@ function getWeatherEmoji(iconCode) {
     };
     return weatherIcons[iconCode] || '🌡️';
 }
+
+// Додаємо обробник зміни одиниць виміру
+document.getElementById('unitsSelect').addEventListener('change', function() {
+    getCurrentWeather();
+    getWeeklyForecast();
+});
 
 // Оновлення погоди при завантаженні та кожні 30 хвилин
 window.addEventListener('load', () => {
@@ -284,4 +503,39 @@ document.querySelector('.hide-history-btn').addEventListener('click', function()
     container.innerHTML = '';
     this.style.display = 'none';
     showBtn.style.display = 'block';
-}); 
+});
+
+// Оновлюємо функцію відкриття налаштувань або додаємо новий код
+document.querySelector('.settings-btn').addEventListener('click', function() {
+    const settingsHtml = `
+        <div class="settings-content">
+            <h3>Налаштування</h3>
+            <div class="settings-group">
+                <label for="nameInput">Ім'я:</label>
+                <input type="text" id="nameInput" placeholder="Введіть ваше ім'я">
+            </div>
+            <div class="settings-group">
+                <label for="themeSelect">Тема:</label>
+                <select id="themeSelect">
+                    <option value="light">Світла</option>
+                    <option value="dark">Темна</option>
+                </select>
+            </div>
+            <div class="settings-group">
+                <label for="unitsSelect">Одиниці виміру:</label>
+                <select id="unitsSelect">
+                    <option value="celsius">°C</option>
+                    <option value="fahrenheit">°F</option>
+                </select>
+            </div>
+            <div class="telegram-link">
+                <a href="https://t.me/Vidgyku_na_temy_saita" target="_blank">
+                    <i>📱</i> Відгуки сайту
+                </a>
+            </div>
+        </div>
+    `;
+    
+    // Показуємо модальне вікно з налаштуваннями
+    showModal(settingsHtml);
+});

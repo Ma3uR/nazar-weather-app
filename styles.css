@@ -824,31 +824,20 @@ body.dark-theme .stars input:checked ~ label {
 }
 
 /* Стилі для посилання на Telegram */
-.telegram-link {
-    margin-top: 20px;
-    padding-top: 15px;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-}
-
 .telegram-link a {
     display: flex;
     align-items: center;
-    color: #0088cc;
+    gap: 10px;
+    padding: 12px 20px;
+    background: rgba(64, 167, 227, 0.05);
+    border-radius: 10px;
+    color: #40a7e3;
     text-decoration: none;
-    font-weight: 500;
-    padding: 10px;
-    border-radius: 8px;
     transition: all 0.3s ease;
 }
 
 .telegram-link a:hover {
-    background: rgba(0, 136, 204, 0.1);
-    transform: translateX(5px);
-}
-
-.telegram-icon {
-    margin-right: 10px;
-    font-size: 20px;
+    background: rgba(64, 167, 227, 0.1);
 }
 
 /* Стилі для темної теми */
@@ -1667,5 +1656,277 @@ body.dark-theme .hide-history-btn {
 
 body.dark-theme .hide-history-btn:hover {
     background: #ff3333;
+}
+
+/* Стилі для стартового екрану */
+.location-setup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(-45deg, #00b4db, #0083b0);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.setup-step {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+    animation: slideIn 0.5s ease-out;
+}
+
+.setup-step h2 {
+    color: #0083b0;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+}
+
+.setup-step p {
+    color: #666;
+    margin-bottom: 25px;
+}
+
+.setup-btn {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 25px;
+    background: #00b4db;
+    color: white;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.setup-btn:hover {
+    background: #0083b0;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.setup-btn.secondary {
+    background: #fff;
+    color: #00b4db;
+    border: 2px solid #00b4db;
+}
+
+.setup-btn.secondary:hover {
+    background: #f0f8ff;
+}
+
+.setup-btn.continue {
+    background: #4CAF50;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+}
+
+.setup-btn.continue:hover {
+    background: #45a049;
+}
+
+.country-search,
+.city-search {
+    margin-bottom: 20px;
+}
+
+.country-search input,
+.city-search input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 25px;
+    font-size: 1em;
+    transition: all 0.3s ease;
+}
+
+.country-search input:focus,
+.city-search input:focus {
+    border-color: #00b4db;
+    outline: none;
+}
+
+.countries-list,
+.cities-list {
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.country-item,
+.city-item {
+    padding: 12px;
+    margin: 5px 0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.country-item:hover,
+.city-item:hover {
+    background: #f0f8ff;
+    transform: translateX(5px);
+}
+
+.selected {
+    background: #e3f2fd;
+    border-left: 4px solid #00b4db;
+}
+
+/* Анімації */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Адаптивність */
+@media (max-width: 768px) {
+    .setup-step {
+        padding: 20px;
+    }
+
+    .setup-btn.continue {
+        bottom: 20px;
+        right: 20px;
+    }
+}
+
+/* Додаємо стилі для стрілки */
+/* Видалити весь цей блок стилів */
+.arrow-hint {
+    position: absolute;
+    right: -300px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ff4d4d;
+    font-size: 150px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: arrowBounce 2s infinite;
+    white-space: nowrap;
+}
+
+.arrow-hint::before {
+    content: '←';
+    font-size: 1.5em;
+    order: 2;
+}
+
+@keyframes arrowBounce {
+    0%, 100% {
+        transform: translateY(-50%) translateX(0);
+    }
+    50% {
+        transform: translateY(-50%) translateX(-10px);
+    }
+}
+
+/* Оновлюємо медіа-запити для стрілки */
+@media (max-width: 1400px) {
+    .arrow-hint {
+        font-size: 100px;
+        right: -200px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .arrow-hint {
+        font-size: 80px;
+        right: -150px;
+    }
+}
+
+@media (max-width: 992px) {
+    .arrow-hint {
+        display: none;
+    }
+}
+
+/* Адаптуємо позиціонування icons-legend */
+.icons-legend {
+    position: relative;
+}
+
+/* Оновлюємо стилі для кнопки геолокації */
+.setup-btn.geo-btn {
+    background: linear-gradient(45deg, #4CAF50, #45a049);
+    padding: 15px 30px;
+    font-size: 1.2em;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.setup-btn.geo-btn:hover {
+    background: linear-gradient(45deg, #45a049, #3d8b40);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+}
+
+.setup-btn.geo-btn:active {
+    transform: translateY(-1px);
+}
+
+.setup-btn.geo-btn i {
+    font-size: 1.3em;
+    animation: pulseLocation 2s infinite;
+}
+
+/* Анімація для іконки геолокації */
+@keyframes pulseLocation {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Додаємо ефект завантаження */
+.setup-btn.geo-btn.loading {
+    background: linear-gradient(45deg, #cccccc, #bbbbbb);
+    cursor: wait;
+    pointer-events: none;
+}
+
+.setup-btn.geo-btn.loading i {
+    animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
