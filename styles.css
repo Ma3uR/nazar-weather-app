@@ -73,8 +73,12 @@ body {
 }
 
 .container {
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 20px;
 }
 
 header {
@@ -149,6 +153,7 @@ header h1 {
 .info-item:nth-child(1) { animation-delay: 0.2s; }
 .info-item:nth-child(2) { animation-delay: 0.4s; }
 .info-item:nth-child(3) { animation-delay: 0.6s; }
+.info-item:nth-child(4) { animation-delay: 0.8s; }
 
 .weather-icon {
     font-size: 2em;
@@ -242,8 +247,8 @@ header h1 {
 
 .rating-section {
     text-align: center;
-    margin-top: 40px;
-    padding: 30px;
+    margin-top: 0;
+    padding-top: 30px;
     border-top: 1px solid #eee;
     position: relative;
     min-height: 200px;
@@ -661,6 +666,105 @@ h1, h2 {
     margin: 10px 0;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
     -webkit-text-stroke: 1px black;
+    animation: glowText 2s ease-in-out infinite;
+    text-shadow: 0 0 10px rgba(255, 140, 0, 0.3);
+}
+
+@keyframes glowText {
+    0%, 100% {
+        text-shadow: 0 0 10px rgba(255, 140, 0, 0.3);
+        transform: scale(1);
+    }
+    50% {
+        text-shadow: 0 0 20px rgba(255, 140, 0, 0.5);
+        transform: scale(1.02);
+    }
+}
+
+header h1, header h2 {
+    animation: slideInFromTop 0.8s ease-out;
+}
+
+.date {
+    animation: fadeInWithDelay 1s ease-out;
+    animation-delay: 0.3s;
+    opacity: 0;
+    animation-fill-mode: forwards;
+}
+
+.forecast h3 {
+    animation: rainbowText 8s linear infinite;
+    background: linear-gradient(
+        90deg,
+        #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff
+    );
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.rating-section h2 {
+    animation: pulseScale 2s ease-in-out infinite;
+}
+
+/* Keyframes для нових анімацій */
+@keyframes slideInFromTop {
+    0% {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInWithDelay {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes rainbowText {
+    0% {
+        background-position: 0% center;
+    }
+    100% {
+        background-position: 200% center;
+    }
+}
+
+@keyframes pulseScale {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
+}
+
+/* Адаптація для темної теми */
+body.dark-theme .forecast h3 {
+    text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.1);
+}
+
+body.dark-theme .rating-section h2 {
+    color: #fff;
+}
+
+/* Анімація при наведенні на заголовки */
+h1:hover, h2:hover, h3:hover {
+    transform: translateY(-2px);
+    transition: transform 0.3s ease;
 }
 
 /* Стилі для темної теми */
@@ -781,6 +885,7 @@ body.dark-theme .telegram-link a:hover {
 .info-item:nth-child(1) { animation-delay: 0.2s; }
 .info-item:nth-child(2) { animation-delay: 0.4s; }
 .info-item:nth-child(3) { animation-delay: 0.6s; }
+.info-item:nth-child(4) { animation-delay: 0.8s; }
 
 .forecast h3 {
     animation: fadeInDown 0.5s ease-out;
@@ -994,3 +1099,573 @@ body.dark-theme .cloud-large {
 body.dark-theme .rain-large {
     color: #4682B4;
 }
+
+/* Анімації для іконок погодних умов */
+.info-item i {
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+/* Анімація для іконки вітру */
+.info-item:nth-child(1) i {
+    animation: windBlow 3s ease-in-out infinite;
+}
+
+@keyframes windBlow {
+    0% { transform: translateX(0) rotate(0deg); }
+    25% { transform: translateX(5px) rotate(15deg); }
+    50% { transform: translateX(-2px) rotate(-10deg); }
+    75% { transform: translateX(5px) rotate(15deg); }
+    100% { transform: translateX(0) rotate(0deg); }
+}
+
+/* Анімація для іконки вологості */
+.info-item:nth-child(2) i {
+    animation: dropletFall 2s ease-in-out infinite;
+    transform-origin: top center;
+}
+
+@keyframes dropletFall {
+    0% { 
+        transform: translateY(-5px) scale(0.8);
+        opacity: 0.5;
+    }
+    50% { 
+        transform: translateY(3px) scale(1.1);
+        opacity: 1;
+    }
+    75% {
+        transform: translateY(0) scale(0.9);
+        opacity: 0.8;
+    }
+    100% { 
+        transform: translateY(-5px) scale(0.8);
+        opacity: 0.5;
+    }
+}
+
+/* Ефект при наведенні на іконку вологості */
+.info-item:nth-child(2):hover i {
+    animation: dropletSplash 1s ease-in-out infinite;
+}
+
+@keyframes dropletSplash {
+    0% {
+        transform: translateY(-8px) scale(0.8);
+        opacity: 0.5;
+    }
+    40% {
+        transform: translateY(5px) scale(1.2);
+        opacity: 1;
+    }
+    50% {
+        transform: translateY(0) scale(1.4);
+        opacity: 0.8;
+    }
+    60% {
+        transform: scale(1.2);
+        opacity: 0.6;
+    }
+    100% {
+        transform: translateY(-8px) scale(0.8);
+        opacity: 0.5;
+    }
+}
+
+/* Анімація для іконки температури */
+.info-item:nth-child(3) i {
+    animation: pressureWave 4s ease-in-out infinite;
+    transform-origin: center;
+}
+
+@keyframes pressureWave {
+    0% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+    25% {
+        transform: scale(0.95) translateY(2px);
+        filter: brightness(0.9);
+    }
+    50% {
+        transform: scale(1.05) translateY(-2px);
+        filter: brightness(1.1);
+    }
+    75% {
+        transform: scale(0.95) translateY(2px);
+        filter: brightness(0.9);
+    }
+    100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+}
+
+/* Ефект при наведенні на іконку тиску */
+.info-item:nth-child(3):hover i {
+    animation: pressureAlert 1.5s ease-in-out infinite;
+}
+
+@keyframes pressureAlert {
+    0% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+    25% {
+        transform: scale(1.1) translateY(-3px);
+        filter: brightness(1.2);
+    }
+    50% {
+        transform: scale(0.9) translateY(3px);
+    filter: brightness(0.8);
+    }
+    75% {
+        transform: scale(1.1) translateY(-3px);
+        filter: brightness(1.2);
+    }
+    100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+}
+
+/* Додакові ефекти при наведенні */
+.info-item:hover i {
+    transform: scale(1.2);
+}
+
+.info-item:nth-child(1):hover i {
+    animation: windBlowFast 1s ease-in-out infinite;
+}
+
+@keyframes windBlowFast {
+    0% { transform: translateX(0) rotate(0deg) scale(1.2); }
+    25% { transform: translateX(8px) rotate(20deg) scale(1.2); }
+    50% { transform: translateX(-4px) rotate(-15deg) scale(1.2); }
+    75% { transform: translateX(8px) rotate(20deg) scale(1.2); }
+    100% { transform: translateX(0) rotate(0deg) scale(1.2); }
+}
+
+.info-item:nth-child(2):hover i {
+    animation: dropletBig 1s ease-in-out infinite;
+}
+
+@keyframes dropletBig {
+    0% { transform: translateY(0) scale(1.2); }
+    50% { transform: translateY(5px) scale(1.1); }
+    70% { transform: translateY(-3px) scale(1.3); }
+    100% { transform: translateY(0) scale(1.2); }
+}
+
+.info-item:nth-child(3):hover i {
+    animation: temperaturePulse 1s ease-in-out infinite;
+}
+
+@keyframes temperaturePulse {
+    0% { transform: scale(1.2); filter: hue-rotate(0deg); }
+    50% { transform: scale(1.3); filter: hue-rotate(45deg); }
+    100% { transform: scale(1.2); filter: hue-rotate(0deg); }
+}
+
+/* Анімація для іконки тиску */
+.info-item:nth-child(4) i {
+    animation: pressurePulse 4s ease-in-out infinite;
+    transform-origin: center;
+}
+
+@keyframes pressurePulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1) rotate(5deg);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Ефект при наведенні */
+.info-item:nth-child(4):hover i {
+    animation: pressureAlert 1s ease-in-out infinite;
+}
+
+@keyframes pressureAlert {
+    0% {
+        transform: scale(1.1);
+    }
+    25% {
+        transform: scale(1.2) rotate(-10deg);
+    }
+    50% {
+        transform: scale(1.1) rotate(10deg);
+    }
+    75% {
+        transform: scale(1.2) rotate(-10deg);
+    }
+    100% {
+        transform: scale(1.1) rotate(0deg);
+    }
+}
+
+/* Оновлюємо затримки анімацій для всіх елементів */
+.info-item:nth-child(1) { animation-delay: 0.2s; }
+.info-item:nth-child(2) { animation-delay: 0.4s; }
+.info-item:nth-child(3) { animation-delay: 0.6s; }
+
+/* Стилі для відображення ймовірності опадів */
+.pop-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 8px;
+    font-size: 0.9em;
+    color: #666;
+    gap: 5px;
+}
+
+.pop-icon {
+    font-size: 1.2em;
+    animation: umbrellaWave 2s ease-in-out infinite;
+}
+
+@keyframes umbrellaWave {
+    0%, 100% { 
+        transform: rotate(0deg);
+        opacity: 0.7;
+    }
+    25% {
+        transform: rotate(-5deg);
+        opacity: 0.9;
+    }
+    75% {
+        transform: rotate(5deg);
+        opacity: 0.9;
+    }
+}
+
+.day:hover .pop-icon {
+    animation: umbrellaWaveHover 1s ease-in-out infinite;
+}
+
+@keyframes umbrellaWaveHover {
+    0%, 100% { 
+        transform: rotate(0deg) scale(1.1);
+        opacity: 1;
+    }
+    25% {
+        transform: rotate(-8deg) scale(1.2);
+    }
+    75% {
+        transform: rotate(8deg) scale(1.2);
+    }
+}
+
+.day:hover .pop-info {
+    color: #00b4db;
+}
+
+/* Адаптація для темної теми */
+body.dark-theme .pop-info {
+    color: #aaa;
+}
+
+body.dark-theme .day:hover .pop-info {
+    color: #40a7e3;
+}
+
+/* Стилі для історичної секції */
+.historical-section {
+    margin-top: 30px;
+    margin-bottom: 40px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.historical-section h3 {
+    text-align: center;
+    margin-bottom: 15px;
+    animation: fadeInDown 0.5s ease-out;
+}
+
+.show-history-btn {
+    display: block;
+    margin: 0 auto;
+    padding: 10px 20px;
+    background: #00b4db;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.show-history-btn:hover {
+    background: #0083b0;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.historical-container {
+    margin-top: 20px;
+    display: grid;
+    gap: 15px;
+}
+
+.historical-day {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    animation: slideIn 0.5s ease-out;
+}
+
+.historical-day:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.historical-weather .description {
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 5px;
+}
+
+.loading {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.error {
+    text-align: center;
+    padding: 20px;
+    color: #ff4444;
+    background: rgba(255, 68, 68, 0.1);
+    border-radius: 10px;
+}
+
+/* Стилі для кнопки під час завантаження */
+.show-history-btn:disabled {
+    background: #ccc;
+    cursor: wait;
+}
+
+/* Адаптація для темної теми */
+body.dark-theme .historical-weather .description {
+    color: #aaa;
+}
+
+body.dark-theme .error {
+    background: rgba(255, 68, 68, 0.2);
+    color: #ff6666;
+}
+
+/* Оновлені стилі для легенди іконок */
+.icons-legend {
+    position: sticky;
+    top: 20px;
+    width: 250px;
+    margin: 0;
+    padding: 20px;
+    background: linear-gradient(135deg, #ffffff 0%, #e6f3ff 100%);
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 149, 255, 0.1);
+    border: 1px solid rgba(0, 149, 255, 0.1);
+    backdrop-filter: blur(5px);
+    flex-shrink: 0;
+}
+
+.icons-legend h4 {
+    margin-bottom: 15px;
+    color: #0066cc;
+    font-size: 1.1em;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #e6f3ff;
+    padding-bottom: 10px;
+}
+
+.legend-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    background: #f5f7fa;
+    border: 1px solid #e6e9f0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.legend-item:hover {
+    background: #ffffff;
+    transform: translateX(8px);
+    box-shadow: 0 2px 8px rgba(0, 119, 255, 0.15);
+    border-color: #99ccff;
+}
+
+.legend-icon {
+    font-size: 1.2em;
+    opacity: 1;
+    min-width: 24px;
+    text-align: center;
+    color: #0077ff;
+}
+
+.legend-text {
+    font-size: 0.95em;
+    color: #005cb8;
+}
+
+/* Адаптація для темної теми */
+body.dark-theme .icons-legend {
+    background: linear-gradient(135deg, #1a2942 0%, #0d1420 100%);
+    border-color: rgba(0, 149, 255, 0.2);
+}
+
+body.dark-theme .icons-legend h4 {
+    color: #66b3ff;
+    border-bottom-color: #1e3a5f;
+}
+
+body.dark-theme .legend-item {
+    background: rgba(40, 44, 52, 0.8);
+    border-color: #2c313c;
+}
+
+body.dark-theme .legend-item:hover {
+    background: #2c313c;
+    border-color: #3366cc;
+}
+
+body.dark-theme .legend-text {
+    color: #99ccff;
+}
+
+body.dark-theme .legend-icon {
+    color: #3399ff;
+}
+
+/* Анімація при наведенні на іконки */
+.legend-item:hover .legend-icon {
+    animation: legendIconPulse 0.5s ease-in-out;
+}
+
+@keyframes legendIconPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* Медіа-запит для адаптивності */
+@media (max-width: 1024px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .icons-legend {
+        width: 100%;
+        position: static;
+        margin: 20px 0;
+    }
+}
+
+/* Стилі для темної теми в історії погоди */
+body.dark-theme .historical-day {
+    background: rgba(40, 44, 52, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark-theme .historical-date p {
+    color: #ffffff;
+}
+
+body.dark-theme .historical-date span {
+    color: #aaaaaa;
+}
+
+body.dark-theme .historical-weather i {
+    color: #000000;  /* Чорний колір для символів погоди */
+    text-shadow: 0 0 3px rgba(255, 255, 255, 0.3);
+}
+
+body.dark-theme .historical-weather .temp {
+    color: #ffffff;
+}
+
+body.dark-theme .historical-weather .description {
+    color: #cccccc;
+}
+
+body.dark-theme .historical-details div {
+    color: #dddddd;
+}
+
+body.dark-theme .historical-details i {
+    color: #000000;  /* Чорний колір для іконок деталей */
+}
+
+body.dark-theme .historical-day:hover {
+    background: rgba(50, 54, 62, 0.95);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Стилі для кнопок історії */
+.history-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.show-history-btn,
+.hide-history-btn {
+    padding: 10px 20px;
+    background: #00b4db;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.show-history-btn:hover,
+.hide-history-btn:hover {
+    background: #0083b0;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.hide-history-btn {
+    background: #ff6b6b;
+}
+
+.hide-history-btn:hover {
+    background: #ff5252;
+}
+
+/* Адаптація для темної теми */
+body.dark-theme .hide-history-btn {
+    background: #ff4d4d;
+}
+
+body.dark-theme .hide-history-btn:hover {
+    background: #ff3333;
+}
+
