@@ -73,11 +73,11 @@ body {
 }
 
 .container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
     max-width: 1200px;
     margin: 0 auto;
-    display: flex;
-    gap: 20px;
-    align-items: flex-start;
     padding: 20px;
 }
 
@@ -657,6 +657,8 @@ h1, h2 {
 }
 
 .main-content {
+    flex: 100%;
+    order: 2;
     animation: fadeIn 0.5s ease-out;
 }
 
@@ -1458,6 +1460,10 @@ body.dark-theme .error {
 
 /* Оновлені стилі для легенди іконок */
 .icons-legend {
+    flex: 1;
+    min-width: 300px;
+    height: fit-content;
+    order: 0;
     position: sticky;
     top: 20px;
     width: 250px;
@@ -1675,7 +1681,9 @@ body.dark-theme .hide-history-btn:hover {
 }
 
 .setup-step {
-    background: rgba(255, 255, 255, 0.95);
+    position: relative;
+    z-index: 1;
+    background: rgba(255, 255, 255, 0.9);
     padding: 30px;
     border-radius: 20px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
@@ -1814,37 +1822,6 @@ body.dark-theme .hide-history-btn:hover {
     }
 }
 
-/* Додаємо стилі для стрілки */
-/* Видалити весь цей блок стилів */
-.arrow-hint {
-    position: absolute;
-    right: -300px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #ff4d4d;
-    font-size: 150px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    animation: arrowBounce 2s infinite;
-    white-space: nowrap;
-}
-
-.arrow-hint::before {
-    content: '←';
-    font-size: 1.5em;
-    order: 2;
-}
-
-@keyframes arrowBounce {
-    0%, 100% {
-        transform: translateY(-50%) translateX(0);
-    }
-    50% {
-        transform: translateY(-50%) translateX(-10px);
-    }
-}
-
 /* Оновлюємо медіа-запити для стрілки */
 @media (max-width: 1400px) {
     .arrow-hint {
@@ -1872,6 +1849,7 @@ body.dark-theme .hide-history-btn:hover {
 }
 
 /* Оновлюємо стилі для кнопки геолокації */
+/* Видалено:
 .setup-btn.geo-btn {
     background: linear-gradient(45deg, #4CAF50, #45a049);
     padding: 15px 30px;
@@ -1897,7 +1875,6 @@ body.dark-theme .hide-history-btn:hover {
     animation: pulseLocation 2s infinite;
 }
 
-/* Анімація для іконки геолокації */
 @keyframes pulseLocation {
     0% {
         transform: scale(1);
@@ -1910,7 +1887,6 @@ body.dark-theme .hide-history-btn:hover {
     }
 }
 
-/* Додаємо ефект завантаження */
 .setup-btn.geo-btn.loading {
     background: linear-gradient(45deg, #cccccc, #bbbbbb);
     cursor: wait;
@@ -1927,6 +1903,183 @@ body.dark-theme .hide-history-btn:hover {
     }
     to {
         transform: rotate(360deg);
+    }
+}
+*/
+
+/* Стилі для анімованого фону */
+.weather-animations {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Оновлюємо стилі для анімованих елементів з різною швидкістю */
+.cloud {
+    position: absolute;
+    opacity: 0.6;
+    animation: moveRight 20s linear infinite;
+    filter: blur(1px);
+}
+
+.sun {
+    position: absolute;
+    font-size: 120px;
+    top: 5%;
+    left: 5%;
+    animation: none;
+    opacity: 0.8;
+    filter: drop-shadow(0 0 10px rgba(255, 200, 0, 0.3));
+    transform: rotate(0deg);
+    animation: rotateSun 30s linear infinite;
+}
+
+.lightning {
+    position: absolute;
+    font-size: 40px;
+    opacity: 0;
+    animation: moveRight 5s linear infinite, flash 5s infinite;
+}
+
+/* Позиціонування хмаринок на різній висоті */
+.cloud:nth-child(1) { 
+    top: 5%; 
+    animation-delay: 0s;
+    font-size: 70px;
+}
+
+.cloud:nth-child(2) { 
+    top: 25%; 
+    animation-delay: -8s;
+    font-size: 55px;
+}
+
+.cloud:nth-child(3) { 
+    top: 45%; 
+    animation-delay: -4s;
+    font-size: 65px;
+}
+
+.cloud:nth-child(4) { 
+    top: 65%; 
+    animation-delay: -12s;
+    font-size: 60px;
+}
+
+.cloud:nth-child(5) { 
+    top: 80%; 
+    animation-delay: -6s;
+    font-size: 58px;
+}
+
+.cloud:nth-child(6) { 
+    top: 15%; 
+    animation-delay: -10s;
+    font-size: 62px;
+}
+
+/* Змінюємо прозорість для створення ефекту глибини */
+.cloud:nth-child(1) { opacity: 0.8; }
+.cloud:nth-child(2) { opacity: 0.7; }
+.cloud:nth-child(3) { opacity: 0.75; }
+.cloud:nth-child(4) { opacity: 0.7; }
+.cloud:nth-child(5) { opacity: 0.65; }
+.cloud:nth-child(6) { opacity: 0.7; }
+
+/* Єдина анімація руху для всіх елементів */
+@keyframes moveRight {
+    from {
+        left: -10%;
+        transform: translateX(-100%);
+    }
+    to {
+        left: 110%;
+        transform: translateX(100%);
+    }
+}
+
+/* Анімація блискавки */
+@keyframes flash {
+    0%, 100% { opacity: 0; }
+    48%, 50% { opacity: 0; }
+    49% { opacity: 1; }
+}
+
+/* Анімація обертання для сонця */
+@keyframes rotateSun {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Оновлюємо стилі для блоку з фактами */
+.weather-facts {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.weather-facts h3 {
+    color: #0083b0;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 1.4em;
+}
+
+/* Оновлюємо стилі для темної теми */
+body.dark-theme .weather-facts {
+    background: rgba(40, 44, 52, 0.95);
+}
+
+body.dark-theme .weather-facts h3 {
+    color: #40a7e3;
+}
+
+.fact {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.8);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.fact:hover {
+    transform: translateX(-5px);
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.fact i {
+    font-size: 24px;
+    color: #0083b0;
+}
+
+.fact p {
+    margin: 0;
+    font-size: 14px;
+    color: #444;
+    line-height: 1.4;
+}
+
+/* Адаптивність для фактів */
+@media (max-width: 1200px) {
+    .weather-facts {
+        width: 90%;
+        margin: 20px auto;
     }
 }
 

@@ -152,52 +152,6 @@ document.addEventListener('DOMContentLoaded', function() {
         getCurrentWeather();
         getWeeklyForecast();
     });
-
-    // Оновлюємо обробник для кнопки геолокації
-    document.getElementById('geoButton').addEventListener('click', function() {
-        const button = this;
-        
-        if (navigator.geolocation) {
-            // Додаємо клас завантаження
-            button.classList.add('loading');
-            button.innerHTML = '<i>🔄</i> Визначаємо місцезнаходження...';
-            
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    // Отримуємо місто за координатами
-                    fetch(`https://api.openweathermap.org/geo/1.0/reverse?lat=${position.coords.latitude}&lon=${position.coords.longitude}&limit=1&appid=${WEATHER_API_KEY}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data[0]) {
-                                CITY = data[0].name;
-                                COUNTRY = data[0].country;
-                                showMainContent();
-                            }
-                        })
-                        .catch(() => {
-                            button.classList.remove('loading');
-                            button.innerHTML = '<i>📍</i> Спробувати ще раз';
-                            alert('Не вдалося визначити місто. Будь ласка, оберіть місто вручну.');
-                            showCountryStep();
-                        });
-                },
-                (error) => {
-                    button.classList.remove('loading');
-                    button.innerHTML = '<i>📍</i> Спробувати ще раз';
-                    alert('Не вдалося визначити місцезнаходження. Оберіть країну вручну.');
-                    showCountryStep();
-                },
-                {
-                    enableHighAccuracy: true,
-                    timeout: 5000,
-                    maximumAge: 0
-                }
-            );
-        } else {
-            alert('Ваш браузер не підтримує геолокацію. Оберіть країну вручну.');
-            showCountryStep();
-        }
-    });
 });
 
 // Функція для конвертації температури
@@ -262,10 +216,10 @@ async function getWeeklyForecast() {
                 
                 if (nextDays.includes(dayName)) {
                     if (!dailyForecasts[dayName]) {
-                        dailyForecasts[dayName] = {
-                            temp: forecast.main.temp,
+                    dailyForecasts[dayName] = {
+                        temp: forecast.main.temp,
                             count: 1,
-                            weather: forecast.weather[0].icon,
+                        weather: forecast.weather[0].icon,
                             description: forecast.weather[0].description,
                             pop: forecast.pop // Ймовірність опадів
                         };
@@ -282,7 +236,7 @@ async function getWeeklyForecast() {
             forecastContainer.innerHTML = '';
 
             nextDays.forEach((dayName) => {
-                const forecast = dailyForecasts[dayName];
+                    const forecast = dailyForecasts[dayName];
                 if (forecast) {
                     const avgTemp = forecast.temp / forecast.count;
                     const temp = convertTemperature(avgTemp, unit);
@@ -349,7 +303,7 @@ window.addEventListener('load', () => {
         getCurrentWeather();
         getWeeklyForecast();
     }, 1800000);
-});
+}); 
 
 // Додаємо функцію для створення конфеті
 function createConfetti() {
